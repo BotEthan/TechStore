@@ -1,0 +1,159 @@
+{% extends 'home.html' %}
+{% block content %}
+{% load static %}
+<style>
+    .category{
+        background-color: rgb(242, 241, 241);
+        margin-top: 0;
+        padding-top: 5px;
+        display: flex;
+        justify-content: end;
+        flex-direction: column;
+    }
+
+    .container.category:first-of-type{
+        margin-top: 10px;
+    }
+
+    .category-title{
+        margin-bottom: 12px;
+        text-align: center;
+    }
+
+    .category ul{
+        list-style: none;
+        display: flex;
+        justify-content: space-evenly;
+        flex-direction: row;
+        flex: 1;
+    }
+    .products-grid{
+        background-color: white;
+        border: 1px rgba(0,0,0,0.3) solid;
+        border-radius: 5px;
+        margin: 10px;
+        padding: 0;
+        height: 450px;
+    }
+    .product-image{
+        height: 200px;
+    }
+    .availability{
+        font-size: 1.1em;
+        text-align: center;
+        color: rgb(70, 131, 64);
+    }
+    .price-box{
+        font-size: 1.3em;
+        text-align: center;
+        height: 32px;
+        margin-bottom: 10px;
+    }
+        
+    .product-name{
+        align-self: center;
+        position: relative;
+        top:5px;
+        text-align: center;
+        height:59px;
+        width:80%;
+        margin-bottom: 8px;
+    }
+
+    .product-name{
+        margin-bottom: 20px;
+    }
+
+    .product-name h3{
+        font-size: 1em;
+        margin: 0;
+    }
+
+    .price-box p{
+        margin: 0;
+    }
+
+    .btn-add-to-cart{
+        margin-bottom: 5px;
+        background-color: white;
+        border-radius: 1px;
+        border: 3px solid rgb(245, 126, 75);
+        color: rgb(245, 126, 75);
+        font-size: 1em;
+        font-weight: 700;
+        transition: 0.3s ease;
+    }
+
+    .btn-add-to-cart:hover{
+        color: white;
+        border-radius: 1px;
+        border: 3px solid rgb(245, 126, 75);
+        background-color: rgb(245, 126, 75);
+        font-size: 1em;
+        font-weight: 700;
+    }
+    
+    .products-grid li{
+        width:33%;
+        height: 100%;
+        display: flex;
+        justify-content: space-around;
+        flex-direction: column;
+        align-items: center;
+        padding: 7px 10px 0px;
+    }
+
+</style>
+
+<script src="{% static 'addtocard.js' %}"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+{% for category in categories %}
+    <div class="container category">
+        <div class="block">
+            <h2 class="category-title">
+                {{ category.1 }} 
+            </h2>
+            <ul class="products-grid cols-5">
+                {% for product in products %}
+                    {% if product.component_category == category.0 %}
+                        <li>
+                            <div class="product-name">
+                                <h3>
+                                    {{ product.product_name }}
+                                </h3>
+                            </div>
+                            <img class="product-image" src="{% static product.image_file|join:'' %}" alt="{{ product.product_name }}">
+                            <div>
+                                <div class="availability">
+                                    {{ product.get_stock_status_display }}
+                                </div>
+                                <div class="price-box">
+                                    {% if product.sale_price > 0 %}
+                                        <p class="original-price" style="font-size: 0.6em; text-decoration: line-through; color: rgb(171, 171, 171);">
+                                            R{{ product.price }}
+                                        </p>
+                                        <p class="sale-price" style="font-size: 1em; font-weight: 600; transform: translateY(-40%);">
+                                            R{{ product.sale_price }}
+                                        </p>
+                                    {% else %}
+                                        <p class="original-price" style="font-weight: 500;">
+                                            R{{ product.price }}
+                                        </p>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            {% if product.get_stock_status_display != "Out of stock" %}
+                                <form method="POST" action="{% url 'main:add_to_cart' product.pk %}">
+                                    {% csrf_token %}
+                                    <input type="submit" value="Add To Cart" class="btn-add-to-cart" id="btn-add-to-cart-{{ product.pk }}">
+                                </form>
+                            {% endif %}
+                        </li>
+                    {% endif %}
+                {% endfor %}   
+            </ul>
+        </div>
+    </div>
+{% endfor %}
+{% endblock %}

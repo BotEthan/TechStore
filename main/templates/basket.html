@@ -1,0 +1,90 @@
+{% extends 'home.html' %}
+{% block content %}
+{% load static %}
+<style>
+    .basket-product-details{
+        display: flex;
+        list-style-type: none;
+        padding: 0;
+        margin: 0;
+    }
+    .basket-product-details li{
+        margin-right: 10px;
+    }
+    .basket-product{
+        margin-top: 10px;
+        margin-bottom: 10px;
+        display: flex;
+        flex-direction: row;
+        border-bottom: 1px solid rgba(171, 171, 171,0.5);
+    }
+    .title-description{
+        display: flex;
+        justify-content: space-evenly;
+        flex-direction: column;
+    }
+    .image-container{
+        height: 100px;
+        width: 100px;
+        margin-right: 10px;
+    }
+
+    .image-container img{
+        height: 100%;
+    }
+    .input-quantity{
+        width: 50px;
+    }
+
+    li form{
+        font-size: 0.8em;
+        width: 80px;
+    }
+
+    li form a{
+        text-decoration: underline;
+        color: black
+    }
+    li form a:hover{
+        text-decoration: none;
+        color: black
+    }
+</style>
+
+{% for product in basket_items %}
+<div class="container basket-product" id="basket-item-{{product.pk}}">
+    <ul class="basket-product-details">
+        <li class="image-container">
+            <img src="{% static product.product.image_file|join:'' %}">
+        </li>
+        <li class="title-description" >
+            <h4>{{ product.product.product_name }}</h4>
+            <br>
+            <h6>Basket ID: {{ product.pk }}</h6>
+            <p>{{ product.product.product_description }}</p>
+        </li>
+        <li class="price-box">
+            {% if product.product.sale_price > 0 %}
+                <p class="original-price" style="font-size: 1em; text-decoration: line-through; color: rgb(171, 171, 171);">
+                    R{{ product.product.price }}
+                </p>
+                <p class="sale-price" style="font-size: 1.5em; font-weight: 700; transform: translateY(-80%);">
+                    R{{ product.product.sale_price }}
+                </p>
+                <input type="number" class="input-quantity" value="{{ product.quantity }}">
+            {% else %}
+                <p class="original-price" style="font-size: 1.5em; font-weight: 700;">
+                    R{{ product.product.price }}
+                </p>
+                <input type="number" class="input-quantity" value="{{ product.quantity }}">
+            {% endif %}
+        </li>
+        <li>
+            <form class="remove-product" action="{% url 'main:basket_remove_item' product.pk %}">
+                <a class="remove-basket-button" href="{% url 'main:basket_remove_item' product.pk %}">Remove item</a>
+            </form>
+        </li>
+    </ul>
+</div>
+{% endfor %}
+{% endblock %}

@@ -1,0 +1,106 @@
+{%load static%}
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Tech Store</title>
+    <link rel="icon" href="{% static 'Images/catscree.JPG' %}">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <link rel="stylesheet" href="{% static 'CSS/home.css' %}">
+  </head>
+<body>
+    <script src="{% static 'scroll.js' %}"></script>
+    <!-- Header -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light" id="nav-bar">
+        <!--Making the logo image and the company title appear on the navbar-->
+        <img class="navbar-brand logo" src="{% static 'Images/non-copyright logo-only.jpg' %}" height="50">
+        <a class="navbar-brand name" href="#" >Ethan's Tech</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <!--Creating the button navigation options-->
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'main:home' %}">Home</a>
+                </li>
+                <li class="nav-item" >
+                    <a class="nav-link" href="#" onclick="scrollToElement('#contact-us')">Contact Us</a>
+                </li>
+            </ul>
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'main:basket' %}">Basket</a>
+                </li>
+                <li class="nav-item">
+                    {% if user.is_authenticated %}
+                        <a class="nav-link" href="{% url 'main:logout' %}">Logout</a>
+                    {% else %}
+                        <a class="nav-link" href="{% url 'main:login' %}">Login</a>
+                    {% endif %}
+                </li>
+            </ul>
+        </div>
+    </nav>
+    
+    <!--A nice peach coloured seperator between header and products-->
+    <div style="background-color: rgb(249,204,157); height: 5px;">
+        <span></span>
+    </div>
+
+    <!-- Shopping Items -->
+    {% block content %}{% endblock %}
+
+    <!--A nice peach coloured seperator between products and footer-->
+    <div style="background-color: rgb(249,204,157); height: 5px;">
+        <span style="padding-top: 50px;"></span>
+    </div>
+
+    <!--Footer-->
+    <div>
+        <footer class="footer bg-light" id="contact-us">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-8">
+                    <form>
+                        <div class="form-row">
+                            <div class="form-group col-md-6" style="padding-top: 10px;">
+                                <label for="inputName">Name</label>
+                                <input type="text" class="form-control" id="inputName" placeholder="Enter your name">
+                            </div>
+                            <div class="form-group col-md-6" style="padding-top: 10px;">
+                                <label for="inputEmail">Email</label>
+                                <input type="email" class="form-control" id="inputEmail" placeholder="Enter your email address">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col-md-12">
+                                <label for="inputMessage">Message</label>
+                                <textarea class="form-control" id="inputMessage" rows="3" placeholder="Enter your message"></textarea>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </form>
+                </div>
+                    <div class="col-md-4" style="padding-top: 10px;">
+                        <h4>Contact Us</h4>
+                        <p>123 Main St<br> Cape Town, South Africa<br> 061 372 7429</p>
+                        <img src="{% static 'Images/non-copyright-logo.jpg' %}" width="150" style="padding-bottom: 5px;">
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </div>        
+    <div id="bottom-page" style="background-color: rgb(248, 249, 250); padding-top: 5px;">
+        <div class="container bottom-bar">
+            <div class="row justify-content-center">
+                <div class="col-md-2 mx-auto">
+                    <a href="#" onclick="scrollToElement('#nav-bar')" style="color: rgba(0,0,0,.5); text-align: justify;" >Go To Top</a>
+                </div> 
+            </div>
+        </div>
+    </div>
+    <div class="container credits">
+        <a href="https://wootware.co.za/" target="_blank">Images and prices acquired from WootWare Computers.</a>
+    </div>
+</body>
