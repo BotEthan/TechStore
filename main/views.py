@@ -11,6 +11,14 @@ from .models import ProductModel, BasketModel
 
 @login_required(login_url='main:login')
 def add_to_cart(request, product_id):
+    """This will add an item to your cart.
+    :param HttpRequest request: The request handed to the function that houses all the data
+    :param int product_id: The id of the product being added to the cart
+
+    :returns: The link to redirect towards
+
+    :rtype: HttpResponseRedirect
+    """
     product = get_object_or_404(ProductModel, pk=product_id)
     if request.method == 'POST':
         quantity = int(request.POST.get('quantity', 1))
@@ -25,10 +33,24 @@ def add_to_cart(request, product_id):
     return redirect('main:home')
 
 def loginregister(request):
+    """Sends you to the login page
+    :param HttpRequest request: The request handed to the function that houses all the data.
+
+    :returns: The response with the page to go to.
+
+    :rtype: HttpResponse
+    """
     return render(request, 'login.html')
 
 # Create your views here.
 def index(request):
+    """The landing page when entering the site
+    :param HttpRequest request: The request handed to the function that houses all the data.
+
+    :returns: The response with the page to go to.
+
+    :rtype: HttpResponse
+    """
     products = ProductModel.objects.all()
     categories = ProductModel.CATEGORY_CHOICES
     context = {
@@ -39,21 +61,50 @@ def index(request):
 
 @login_required(login_url='main:login')
 def basket(request):
+    """The entrypoint for seeing your basket.
+    :param HttpRequest request: The request handed to the function that houses all the data.
+
+    :returns: The response with the page to go to.
+
+    :rtype: HttpResponse
+    """
     user = request.user
     basket_items = BasketModel.objects.filter(user=user)
     context = {'basket_items': basket_items}
     return render(request, 'basket.html', context)
 
 def basketRemove(request, basket_id):
+    """This will remove an item to your cart.
+    :param HttpRequest request: The request handed to the function that houses all the data
+    :param int product_id: The id of the product being removed from the cart
+
+    :returns: The link to redirect towards
+
+    :rtype: HttpResponseRedirect
+    """
     basket_item = get_object_or_404(BasketModel, id=basket_id, user=request.user)
     basket_item.delete()
     return redirect('main:basket')
 
 def logout_view(request):
+    """This will log you out of your current account.
+    :param HttpRequest request: The request handed to the function that houses all the data
+
+    :returns: The link to redirect towards
+
+    :rtype: HttpResponseRedirect
+    """
     logout(request)
     return redirect('main:home')
 
 def create_user(request):
+    """This will create an account.
+    :param HttpRequest request: The request handed to the function that houses all the data
+
+    :returns: The link to redirect towards
+
+    :rtype: HttpResponseRedirect
+    """
     firstName = request.POST['firstname']
     username = request.POST['username']
     password = request.POST['password']
@@ -65,6 +116,13 @@ def create_user(request):
 
 
 def attemptLogin(request):
+    """This will verify the given account details to an existing account.
+    :param HttpRequest request: The request handed to the function that houses all the data
+
+    :returns: The link to redirect towards
+
+    :rtype: str
+    """
     username = request.POST['username']
     password = request.POST['password']
     user = authenticate(username=username, password=password)

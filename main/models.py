@@ -6,6 +6,9 @@ from django.contrib.auth.models import User
 
 
 class ProductModel(models.Model):
+    """A class to create products by creating a product model object.
+    This class is an extension of the :class:`models.Model` class.
+    """
     CATEGORY_CHOICES = [
     ('FANS_AND_CPU_COOLERS', 'Fans & CPU Coolers'),
     ('CASES_CHASSIS', 'Cases / Chassis'),
@@ -28,6 +31,9 @@ class ProductModel(models.Model):
         return self.product_name
 
 class BasketModel(models.Model):
+    """A class to create a basket for the user by creating a basket model object.
+    This class is an extension of the :class:`models.Model` class.
+    """
     user = models.ForeignKey(User, on_delete=models.CASCADE, default=1)
     product = models.ForeignKey(ProductModel, on_delete=models.CASCADE)
     quantity = models.PositiveIntegerField(default=1)
